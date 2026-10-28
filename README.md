@@ -36,3 +36,8 @@ npx serve .
 ```
 
 (la validation des codes utilise `crypto.subtle`, qui exige `https://` ou `localhost`, pas `file://`).
+
+## Affiche à imprimer
+
+`affiche.pdf` (A4) : affiche au thème pirate avec un QR code vers le site. La source est `affiche.html`,
+également publiée sur https://gregfontaine.github.io/treasure-hunt/affiche.html (imprimer depuis le navigateur, sans marges).

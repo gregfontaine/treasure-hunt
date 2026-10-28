@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Affiche – La chasse au trésor d'Alicia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    @page { size: A4 portrait; margin: 0; }
+    :root {
+      --ink: #2a1a05;
+      --ink-soft: #5a3d14;
+      --rust: #8b2e1c;
+      --parch-1: #f3e4bd;
+      --parch-2: #e6cf98;
+      --parch-3: #cfae6c;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: #6b5436; }
+    body { font-family: "IM Fell English", Georgia, serif; color: var(--ink); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+    .sheet {
+      width: 210mm; height: 297mm; margin: 0 auto; position: relative; overflow: hidden;
+      background:
+        radial-gradient(120% 90% at 50% 40%, rgba(255,250,230,.55) 0%, transparent 60%),
+        radial-gradient(60% 40% at 8% 8%, rgba(120,70,20,.55) 0%, transparent 60%),
+        radial-gradient(60% 40% at 92% 95%, rgba(120,70,20,.55) 0%, transparent 60%),
+        radial-gradient(40% 30% at 95% 5%, rgba(90,50,10,.45) 0%, transparent 60%),
+        radial-gradient(40% 30% at 5% 95%, rgba(90,50,10,.45) 0%, transparent 60%),
+        linear-gradient(160deg, var(--parch-1), var(--parch-2) 55%, var(--parch-3));
+    }
+    .sheet::before {
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        radial-gradient(rgba(90,50,10,.10) 1px, transparent 1.5px),
+        radial-gradient(rgba(255,255,255,.18) 1px, transparent 1.5px);
+      background-size: 7px 7px, 11px 11px; background-position: 0 0, 3px 5px;
+      opacity: .8;
+    }
+    .frame {
+      position: absolute; inset: 11mm; border: 1.2mm solid var(--ink-soft); border-radius: 3mm;
+      outline: .4mm solid var(--ink-soft); outline-offset: 1.6mm;
+    }
+    .corner { position: absolute; font-size: 11mm; line-height: 1; color: var(--ink-soft); }
+    .corner.tl { top: 14mm; left: 15mm; } .corner.tr { top: 14mm; right: 15mm; }
+    .corner.bl { bottom: 14mm; left: 15mm; } .corner.br { bottom: 14mm; right: 15mm; }
+
+    .content { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 26mm 18mm 20mm; }
+    .kicker { font-style: italic; font-size: 7mm; letter-spacing: .5mm; color: var(--rust); margin: 0; }
+    h1 {
+      font-family: "Pirata One", "Pirata", cursive; font-weight: 400; font-size: 22mm; line-height: .95;
+      margin: 2mm 0 0; color: var(--ink);
+      text-shadow: .6mm .6mm 0 rgba(139,46,28,.35);
+    }
+    .rule { width: 120mm; height: 1mm; margin: 6mm 0; border: 0;
+      background: linear-gradient(90deg, transparent, var(--ink-soft) 20%, var(--ink-soft) 80%, transparent); }
+    .lead { font-size: 7mm; line-height: 1.3; margin: 0 0 7mm; max-width: 160mm; }
+    .lead b { color: var(--rust); }
+
+    .qr-wrap {
+      position: relative; padding: 7mm; background: #fffaf0;
+      border: 1.5mm solid var(--ink); border-radius: 2mm;
+      box-shadow: 0 0 0 1.5mm #fffaf0, 0 0 0 2.2mm var(--ink-soft), 3mm 4mm 0 rgba(42,26,5,.18);
+      transform: rotate(-1.2deg);
+    }
+    .qr-wrap svg { display: block; width: 104mm; height: 104mm; shape-rendering: crispEdges; }
+    .qr-wrap svg path { stroke: var(--ink); stroke-width: 1; }
+    .tag {
+      position: absolute; top: -8mm; left: 50%; transform: translateX(-50%) rotate(1.2deg);
+      background: var(--rust); color: #fff3d6; font-family: "Pirata One", cursive; font-size: 8.5mm;
+      padding: 1mm 8mm; border-radius: 1.5mm; letter-spacing: .3mm; white-space: nowrap;
+      box-shadow: 1mm 1.5mm 0 rgba(42,26,5,.3);
+    }
+    .url { margin: 11mm 0 0; font-size: 5.6mm; letter-spacing: .2mm; color: var(--ink-soft); }
+    .url span { font-family: ui-monospace, Consolas, monospace; font-size: 5.2mm; color: var(--ink); }
+    .foot { margin-top: auto; font-style: italic; font-size: 5.4mm; color: var(--ink-soft); max-width: 135mm; line-height: 1.3; }
+    .x { font-size: 9mm; color: var(--rust); font-family: "Pirata One", cursive; }
+
+    @media screen { body { padding: 10mm 0; } .sheet { box-shadow: 0 10mm 30mm rgba(0,0,0,.5); } }
+  </style>
+</head>
+<body>
+  <div class="sheet">
+    <div class="frame"></div>
+    <div class="corner tl">☠</div><div class="corner tr">☠</div>
+    <div class="corner bl">⚔</div><div class="corner br">⚔</div>
+    <div class="content">
+      <p class="kicker">— Avis à tous les moussaillons —</p>
+      <h1>La chasse<br>au trésor d'Alicia</h1>
+      <hr class="rule">
+      <p class="lead">Un vieux pirate a caché un trésor…<br>Il a laissé ses énigmes en vidéo.<br><b>Scannez le code pour l'affronter !</b></p>
+      <div class="qr-wrap">
+        <div class="tag">Scannez-moi</div>
+        <svg viewBox="0 0 41 41" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="QR code vers la chasse au trésor"><path class="qrline" stroke="#2a1a05" d="M0 0.5h7m1 0h2m4 0h1m2 0h3m4 0h2m4 0h1m3 0h7m-41 1h1m5 0h1m2 0h1m3 0h3m2 0h1m1 0h1m1 0h1m1 0h1m4 0h1m4 0h1m5 0h1m-41 1h1m1 0h3m1 0h1m1 0h1m2 0h4m2 0h2m1 0h1m1 0h3m1 0h1m1 0h4m2 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m2 0h4m2 0h1m3 0h1m6 0h3m5 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m1 0h2m1 0h1m2 0h1m1 0h2m2 0h5m1 0h1m1 0h1m1 0h3m1 0h1m1 0h3m1 0h1m-41 1h1m5 0h1m5 0h2m1 0h4m3 0h2m1 0h2m2 0h1m2 0h1m1 0h1m5 0h1m-41 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-33 1h2m1 0h1m3 0h1m1 0h3m1 0h3m2 0h3m-24 1h2m4 0h2m1 0h2m2 0h1m1 0h1m1 0h4m3 0h1m1 0h1m2 0h1m1 0h1m1 0h1m1 0h1m-40 1h2m5 0h2m2 0h2m1 0h1m1 0h2m1 0h2m3 0h1m1 0h1m3 0h1m3 0h2m3 0h1m-40 1h3m2 0h3m4 0h2m1 0h2m1 0h1m1 0h1m2 0h4m4 0h1m1 0h3m2 0h1m-39 1h2m2 0h1m2 0h2m2 0h4m1 0h3m3 0h2m1 0h3m1 0h3m1 0h4m1 0h2m-41 1h4m1 0h2m4 0h1m1 0h4m1 0h1m2 0h1m1 0h1m2 0h3m6 0h1m-34 1h1m4 0h3m2 0h1m2 0h2m1 0h1m1 0h1m2 0h1m1 0h1m2 0h1m1 0h1m4 0h3m2 0h1m-41 1h1m1 0h2m1 0h4m1 0h1m2 0h2m3 0h1m1 0h1m1 0h2m8 0h2m5 0h1m-39 1h1m3 0h1m5 0h4m2 0h1m2 0h1m1 0h1m3 0h2m4 0h2m1 0h1m1 0h3m-40 1h2m2 0h1m1 0h2m2 0h3m1 0h1m1 0h2m1 0h1m3 0h3m3 0h2m1 0h2m1 0h1m2 0h1m1 0h1m-41 1h2m1 0h1m3 0h4m3 0h1m1 0h1m3 0h2m5 0h2m1 0h11m-40 1h2m3 0h2m4 0h1m2 0h1m1 0h2m1 0h2m2 0h1m1 0h2m1 0h3m2 0h3m3 0h1m-41 1h1m2 0h1m4 0h1m3 0h8m3 0h1m1 0h1m2 0h1m3 0h2m2 0h2m2 0h1m-41 1h2m3 0h4m1 0h1m1 0h1m1 0h1m5 0h1m1 0h3m1 0h2m2 0h1m2 0h1m1 0h4m1 0h1m-41 1h2m2 0h2m1 0h1m5 0h6m1 0h1m3 0h2m1 0h2m2 0h1m4 0h1m1 0h1m-39 1h7m3 0h1m1 0h4m8 0h4m1 0h2m1 0h2m1 0h2m-37 1h1m3 0h1m2 0h2m1 0h1m1 0h6m3 0h1m1 0h1m3 0h1m2 0h4m2 0h1m2 0h1m-39 1h1m1 0h1m1 0h4m1 0h4m3 0h1m2 0h1m1 0h3m1 0h3m2 0h2m1 0h2m1 0h2m-35 1h1m2 0h4m1 0h3m3 0h1m4 0h1m2 0h6m1 0h5m2 0h1m-41 1h2m1 0h2m1 0h1m2 0h2m3 0h1m1 0h2m1 0h1m5 0h1m1 0h2m1 0h1m1 0h2m5 0h1m-40 1h6m1 0h1m1 0h1m6 0h1m4 0h1m3 0h3m2 0h2m1 0h2m1 0h3m1 0h1m-41 1h1m1 0h1m1 0h1m1 0h1m2 0h6m4 0h1m5 0h5m1 0h1m1 0h1m3 0h2m-39 1h2m6 0h1m1 0h1m1 0h2m2 0h4m1 0h2m6 0h1m2 0h2m1 0h2m3 0h1m-41 1h2m2 0h4m1 0h3m2 0h2m2 0h4m1 0h1m3 0h1m1 0h1m2 0h2m2 0h1m1 0h1m1 0h1m-41 1h1m2 0h3m2 0h2m1 0h2m3 0h3m3 0h2m1 0h2m4 0h2m1 0h1m2 0h1m1 0h1m-40 1h1m2 0h1m1 0h2m1 0h1m3 0h1m2 0h1m2 0h1m4 0h1m2 0h4m1 0h6m1 0h3m-33 1h2m1 0h1m1 0h1m2 0h1m2 0h2m2 0h3m1 0h1m1 0h4m3 0h3m-39 1h7m2 0h2m3 0h1m1 0h2m1 0h1m2 0h1m1 0h1m2 0h1m1 0h1m1 0h2m1 0h1m1 0h1m-37 1h1m5 0h1m1 0h2m3 0h2m8 0h1m1 0h1m3 0h4m3 0h2m1 0h2m-41 1h1m1 0h3m1 0h1m3 0h2m2 0h2m1 0h2m1 0h2m6 0h2m1 0h6m-37 1h1m1 0h3m1 0h1m3 0h1m1 0h1m5 0h2m1 0h1m5 0h2m1 0h3m2 0h1m1 0h2m1 0h1m-41 1h1m1 0h3m1 0h1m2 0h3m1 0h1m2 0h2m5 0h3m1 0h2m4 0h4m1 0h2m-40 1h1m5 0h1m2 0h3m1 0h4m1 0h4m11 0h1m2 0h2m2 0h1m-41 1h7m3 0h4m2 0h2m1 0h3m1 0h2m2 0h1m1 0h1m1 0h1m1 0h4"/></svg>
+      </div>
+      <p class="url">ou tapez l'adresse : <span>gregfontaine.github.io/treasure-hunt</span></p>
+      <p class="foot"><span class="x">X</span> marque l'endroit… Montez le son, ouvrez l'œil, et gare au squelette si vous vous trompez de code !</p>
+    </div>
+  </div>
+</body>
+</html>
