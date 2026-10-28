@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>La chasse au trésor d'Alicia</title>
+  <meta name="description" content="Chasse au trésor en vidéo : le pirate révèle les indices, à toi de trouver les codes !">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏴‍☠️</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Nunito:wght@500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b1420;
+      --bg-2: #132033;
+      --ink: #f4e9d2;
+      --muted: #b8a98a;
+      --gold: #e9b84c;
+      --gold-2: #ffd97a;
+      --rust: #b3472f;
+      --ok: #5ad17a;
+      --panel: rgba(16, 27, 43, .85);
+      --shadow: 0 20px 60px rgba(0, 0, 0, .6);
+    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: "Nunito", system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 600px at 50% -10%, #1d3350 0%, transparent 60%),
+        radial-gradient(800px 500px at 90% 110%, #2a1a12 0%, transparent 60%),
+        var(--bg);
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed; inset: 0; pointer-events: none;
+      background-image: radial-gradient(rgba(255,255,255,.08) 1px, transparent 1px);
+      background-size: 3px 3px;
+      opacity: .35;
+      mix-blend-mode: overlay;
+    }
+    header {
+      padding: 18px 16px 6px;
+      text-align: center;
+    }
+    h1 {
+      font-family: "Pirata One", "Nunito", cursive;
+      font-weight: 400;
+      font-size: clamp(30px, 6vw, 48px);
+      margin: 0;
+      letter-spacing: .5px;
+      color: var(--gold-2);
+      text-shadow: 0 2px 0 #6b4a12, 0 8px 24px rgba(0,0,0,.6);
+    }
+    .steps {
+      display: flex; gap: 8px; justify-content: center; margin: 10px 0 0;
+      padding: 0; list-style: none;
+    }
+    .steps li {
+      width: 12px; height: 12px; border-radius: 50%;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.18);
+      transition: background .3s, transform .3s;
+    }
+    .steps li.done { background: var(--ok); border-color: var(--ok); }
+    .steps li.current { background: var(--gold); border-color: var(--gold-2); transform: scale(1.3); }
+
+    main {
+      width: min(100%, 560px);
+      flex: 1;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 8px 16px 24px;
+      gap: 16px;
+    }
+    .screen { display: none; width: 100%; animation: fadeIn .5s ease both; }
+    .screen.active { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+    /* Video */
+    .player {
+      width: 100%;
+      background: #000;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: var(--shadow), 0 0 0 2px rgba(233,184,76,.35);
+      aspect-ratio: 800 / 1136;
+      max-height: 72dvh;
+      margin: 0 auto;
+    }
+    video { width: 100%; height: 100%; display: block; object-fit: contain; background: #000; }
+
+    /* Buttons */
+    .btn {
+      font: inherit; font-weight: 900; font-size: 20px;
+      padding: 14px 32px;
+      border-radius: 999px;
+      border: 0;
+      cursor: pointer;
+      color: #2a1a05;
+      background: linear-gradient(180deg, var(--gold-2), var(--gold));
+      box-shadow: 0 6px 0 #8a5f14, 0 14px 30px rgba(0,0,0,.5);
+      transition: transform .08s, box-shadow .08s, filter .2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:hover { filter: brightness(1.05); }
+    .btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #8a5f14, 0 8px 18px rgba(0,0,0,.5); }
+    .btn.big { font-size: 26px; padding: 18px 44px; }
+    .btn.ghost {
+      background: transparent; color: var(--gold-2);
+      border: 2px solid rgba(233,184,76,.5); box-shadow: none; font-size: 16px; padding: 10px 20px;
+    }
+    .btn.ghost:active { transform: translateY(1px); }
+
+    /* Code panel */
+    .panel {
+      width: 100%;
+      background: var(--panel);
+      border: 1px solid rgba(233,184,76,.3);
+      border-radius: 18px;
+      padding: 24px 20px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      backdrop-filter: blur(6px);
+    }
+    .panel h2 {
+      font-family: "Pirata One", cursive; font-weight: 400;
+      font-size: 30px; margin: 0 0 6px; color: var(--gold-2);
+    }
+    .panel p { margin: 0 0 18px; color: var(--muted); font-weight: 700; }
+    form { display: flex; flex-direction: column; gap: 14px; align-items: center; }
+    input[type="text"] {
+      font: inherit; font-weight: 900; font-size: 34px; letter-spacing: .35em; text-align: center;
+      width: 100%; max-width: 280px;
+      padding: 12px 10px 12px 20px;
+      border-radius: 14px;
+      border: 2px solid rgba(233,184,76,.45);
+      background: #07101a; color: var(--gold-2);
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    input[type="text"]:focus { border-color: var(--gold-2); box-shadow: 0 0 0 4px rgba(233,184,76,.2); }
+    input.wrong { border-color: var(--rust); animation: shake .5s; }
+    input.right { border-color: var(--ok); box-shadow: 0 0 0 4px rgba(90,209,122,.25); }
+    @keyframes shake {
+      10%, 90% { transform: translateX(-2px); }
+      20%, 80% { transform: translateX(4px); }
+      30%, 50%, 70% { transform: translateX(-8px); }
+      40%, 60% { transform: translateX(8px); }
+    }
+    .hint { font-size: 14px; color: var(--muted); margin-top: 4px; min-height: 1.2em; }
+    .hint.ok { color: var(--ok); font-weight: 900; }
+
+    /* End screen */
+    .end { text-align: center; }
+    .end .big-emoji { font-size: 90px; line-height: 1; margin: 6px 0; animation: bounce 1.6s ease-in-out infinite; }
+    @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+
+    footer {
+      padding: 10px 16px 18px; font-size: 12px; color: rgba(184,169,138,.6);
+      text-align: center;
+    }
+    footer a { color: inherit; }
+
+    /* Skeleton overlay */
+    .skeleton {
+      position: fixed; inset: 0; z-index: 50;
+      display: none; align-items: center; justify-content: center; flex-direction: column;
+      background: radial-gradient(circle at 50% 50%, rgba(120, 0, 0, .55), rgba(0,0,0,.85));
+      pointer-events: none;
+    }
+    .skeleton.show { display: flex; animation: flash .3s ease-out; }
+    @keyframes flash { from { background: #fff; } to { } }
+    .skull {
+      font-size: clamp(120px, 40vw, 220px); line-height: 1;
+      filter: drop-shadow(0 0 30px rgba(255,255,255,.6));
+      animation: rattle .18s linear infinite, grow 1.6s ease-out both;
+      transform-origin: 50% 70%;
+    }
+    @keyframes rattle {
+      0% { transform: rotate(-6deg) translateX(-4px); }
+      50% { transform: rotate(6deg) translateX(4px); }
+      100% { transform: rotate(-6deg) translateX(-4px); }
+    }
+    @keyframes grow { from { scale: .3; opacity: 0; } 25% { scale: 1.15; opacity: 1; } 100% { scale: 1; } }
+    .bones {
+      font-size: clamp(60px, 18vw, 110px); margin-top: -10px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .skeleton p {
+      font-family: "Pirata One", cursive; font-size: clamp(28px, 7vw, 44px);
+      color: #ffdcdc; text-shadow: 0 4px 14px #000; margin: 16px 0 0;
+      animation: fadeIn .6s .4s both;
+    }
+
+    /* Confetti */
+    .confetti { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 40; }
+    .confetti i {
+      position: absolute; top: -20px; width: 10px; height: 16px; border-radius: 2px;
+      animation: fall linear forwards;
+    }
+    @keyframes fall {
+      to { transform: translateY(110vh) rotate(720deg); opacity: .8; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🏴‍☠️ La chasse au trésor d'Alicia</h1>
+    <ol class="steps" id="steps" aria-label="Progression"></ol>
+  </header>
+
+  <main>
+    <!-- Landing -->
+    <section class="screen active" id="screen-landing">
+      <div class="panel">
+        <h2>Ohé, moussaillon !</h2>
+        <p>Un vieux pirate a caché un trésor… et il a laissé des indices en vidéo.<br>Monte le son et prépare-toi à résoudre ses énigmes !</p>
+        <button class="btn big" id="btn-begin">⚓ C'est parti !</button>
+      </div>
+    </section>
+
+    <!-- Video -->
+    <section class="screen" id="screen-video">
+      <div class="player">
+        <video id="video" controls playsinline preload="auto"></video>
+      </div>
+      <button class="btn ghost" id="btn-skip-to-code" hidden>J'ai trouvé le code →</button>
+    </section>
+
+    <!-- Code entry / start button -->
+    <section class="screen" id="screen-code">
+      <div class="panel">
+        <h2 id="code-title">Quel est le code ?</h2>
+        <p id="code-text">Entre le code que tu as découvert.</p>
+        <form id="code-form" autocomplete="off">
+          <input type="text" id="code-input" inputmode="numeric" pattern="[0-9]*" maxlength="8" placeholder="····" aria-label="Code">
+          <button class="btn" type="submit">Valider</button>
+          <div class="hint" id="hint"></div>
+        </form>
+        <button class="btn big" id="btn-start" hidden>Démarrer !</button>
+      </div>
+      <button class="btn ghost" id="btn-replay">🔁 Revoir la vidéo</button>
+    </section>
+
+    <!-- End -->
+    <section class="screen" id="screen-end">
+      <div class="panel end">
+        <div class="big-emoji">💰</div>
+        <h2>Fin de la chasse !</h2>
+        <p>Le pirate n'a plus rien à dire… Joyeux anniversaire, Alicia ! 🎂</p>
+        <button class="btn ghost" id="btn-replay-end">🔁 Revoir la dernière vidéo</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <a href="#" id="btn-reset">Recommencer depuis le début</a>
+  </footer>
+
+  <div class="skeleton" id="skeleton" aria-hidden="true">
+    <div class="skull">💀</div>
+    <div class="bones">🦴</div>
+    <p id="skeleton-text">Arrr ! Mauvais code !</p>
+  </div>
+  <div class="confetti" id="confetti"></div>
+
+  <script>
+    // ---- Configuration -----------------------------------------------------
+    // Les codes ne sont pas écrits en clair : seul leur hachage SHA-256 (préfixé) est stocké.
+    const SALT = 'alicia-';
+    const STEPS = [
+      { video: 'videos/etape1.mp4', kind: 'start' },
+      { video: 'videos/etape2.mp4', kind: 'code', hash: '7d0486b6a4becc7b00aa50ba9e4c0e5fe9632bd27e854e6f144f09ef36e43502' },
+      { video: 'videos/etape3.mp4', kind: 'code', hash: 'da341a01ee65d6ff7b307cc25febca7c5ac3d6053af9283540502a7eac55082e' },
+      { video: 'videos/etape4.mp4', kind: 'code', hash: '13ff03103c3f1773fdd9c8052190ffa3e93d0360399146fcb2fc264ab8213165' },
+      { video: 'videos/etape5.mp4', kind: 'code', hash: 'ad6eb60d35731886a53d259a9b6b128d07eec7a6f0f25a6304ea390524ca3788' },
+      { video: 'videos/etape6.mp4', kind: 'code', hash: '54037b6cb89fcd616725f7d8f9fdf12741cbe19ab212184f837e631045a486ad' },
+      { video: 'videos/etape7.mp4', kind: 'end' },
+    ];
+    const WRONG_MESSAGES = [
+      'Arrr ! Mauvais code !',
+      'Non non non, moussaillon !',
+      'Hé hé hé… raté !',
+      'Les requins t\'attendent…',
+      'Réfléchis encore, matelot !',
+    ];
+    const STORAGE_KEY = 'treasure-hunt-step';
+
+    // ---- State -------------------------------------------------------------
+    const $ = (id) => document.getElementById(id);
+    const screens = {
+      landing: $('screen-landing'), video: $('screen-video'), code: $('screen-code'), end: $('screen-end'),
+    };
+    const video = $('video');
+    const input = $('code-input');
+    const hint = $('hint');
+    let step = 0;
+    let wrongCount = 0;
+
+    try {
+      const saved = parseInt(localStorage.getItem(STORAGE_KEY), 10);
+      if (!Number.isNaN(saved) && saved > 0 && saved < STEPS.length) step = saved;
+    } catch (e) {}
+    if (new URLSearchParams(location.search).has('reset')) { step = 0; save(); }
+
+    function save() { try { localStorage.setItem(STORAGE_KEY, String(step)); } catch (e) {} }
+
+    function show(name) {
+      for (const [k, el] of Object.entries(screens)) el.classList.toggle('active', k === name);
+      if (name !== 'video') video.pause();
+    }
+
+    function renderSteps() {
+      const ol = $('steps');
+      ol.innerHTML = '';
+      STEPS.forEach((_, i) => {
+        const li = document.createElement('li');
+        if (i < step) li.classList.add('done');
+        if (i === step) li.classList.add('current');
+        ol.appendChild(li);
+      });
+    }
+
+    // ---- Flow --------------------------------------------------------------
+    function playStep() {
+      renderSteps();
+      save();
+      const s = STEPS[step];
+      $('btn-skip-to-code').hidden = true;
+      show('video');
+      if (video.getAttribute('src') !== s.video) {
+        video.src = s.video;
+        video.load();
+      } else {
+        video.currentTime = 0;
+      }
+      // Préchargement de la vidéo suivante
+      if (STEPS[step + 1]) {
+        const link = document.createElement('link');
+        link.rel = 'prefetch'; link.as = 'video'; link.href = STEPS[step + 1].video;
+        document.head.appendChild(link);
+      }
+      const p = video.play();
+      if (p && p.catch) p.catch(() => { /* l'utilisateur appuiera sur play */ });
+    }
+
+    function afterVideo() {
+      const s = STEPS[step];
+      if (s.kind === 'end') {
+        show('end');
+        confetti();
+        return;
+      }
+      const isStart = s.kind === 'start';
+      $('code-form').hidden = isStart;
+      $('btn-start').hidden = !isStart;
+      $('code-title').textContent = isStart ? 'Prête ?' : 'Quel est le code ?';
+      $('code-text').textContent = isStart
+        ? 'La chasse au trésor commence maintenant…'
+        : 'Entre le code que tu as découvert.';
+      input.value = '';
+      input.classList.remove('wrong', 'right');
+      hint.textContent = '';
+      hint.classList.remove('ok');
+      show('code');
+      if (!isStart) setTimeout(() => input.focus(), 150);
+    }
+
+    function nextStep() {
+      step += 1;
+      wrongCount = 0;
+      playStep();
+    }
+
+    async function sha256(text) {
+      const data = new TextEncoder().encode(text);
+      const buf = await crypto.subtle.digest('SHA-256', data);
+      return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    async function checkCode(raw) {
+      const code = raw.replace(/\s+/g, '');
+      if (!code) { input.focus(); return; }
+      const s = STEPS[step];
+      let ok = false;
+      try {
+        ok = (await sha256(SALT + code)) === s.hash;
+      } catch (e) {
+        hint.textContent = 'Ouvre cette page en https:// ou sur localhost pour valider les codes.';
+        return;
+      }
+      if (ok) {
+        input.classList.remove('wrong');
+        input.classList.add('right');
+        hint.textContent = 'Bravo, c\'est le bon code !';
+        hint.classList.add('ok');
+        setTimeout(nextStep, 900);
+      } else {
+        wrongCount += 1;
+        input.classList.remove('wrong');
+        void input.offsetWidth; // relance l'animation
+        input.classList.add('wrong');
+        showSkeleton();
+      }
+    }
+
+    // ---- Effects -----------------------------------------------------------
+    let skeletonTimer;
+    function showSkeleton() {
+      const el = $('skeleton');
+      $('skeleton-text').textContent = WRONG_MESSAGES[(wrongCount - 1) % WRONG_MESSAGES.length];
+      el.classList.remove('show');
+      void el.offsetWidth;
+      el.classList.add('show');
+      if (navigator.vibrate) navigator.vibrate([80, 40, 80]);
+      clearTimeout(skeletonTimer);
+      skeletonTimer = setTimeout(() => {
+        el.classList.remove('show');
+        input.value = '';
+        input.focus();
+      }, 1800);
+    }
+
+    function confetti() {
+      const box = $('confetti');
+      box.innerHTML = '';
+      const colors = ['#e9b84c', '#ffd97a', '#5ad17a', '#ff6b6b', '#6bc5ff', '#ffffff'];
+      for (let i = 0; i < 140; i++) {
+        const c = document.createElement('i');
+        c.style.left = Math.random() * 100 + 'vw';
+        c.style.background = colors[i % colors.length];
+        c.style.animationDuration = 2.5 + Math.random() * 2.5 + 's';
+        c.style.animationDelay = Math.random() * 1.5 + 's';
+        c.style.transform = `rotate(${Math.random() * 360}deg)`;
+        box.appendChild(c);
+      }
+      setTimeout(() => { box.innerHTML = ''; }, 7000);
+    }
+
+    // ---- Wiring ------------------------------------------------------------
+    $('btn-begin').addEventListener('click', playStep);
+    video.addEventListener('ended', afterVideo);
+    video.addEventListener('play', () => {
+      // Une fois la vidéo vue en entier, on peut sauter directement à la saisie lors des replays
+      if (video._seen) $('btn-skip-to-code').hidden = false;
+    });
+    video.addEventListener('ended', () => { video._seen = true; });
+    $('btn-skip-to-code').addEventListener('click', afterVideo);
+    $('btn-replay').addEventListener('click', () => { show('video'); video.currentTime = 0; video.play(); });
+    $('btn-replay-end').addEventListener('click', () => { show('video'); video.currentTime = 0; video.play(); });
+    $('btn-start').addEventListener('click', nextStep);
+    $('code-form').addEventListener('submit', (e) => { e.preventDefault(); checkCode(input.value); });
+    $('btn-reset').addEventListener('click', (e) => {
+      e.preventDefault();
+      if (confirm('Recommencer la chasse au trésor depuis le début ?')) {
+        step = 0; wrongCount = 0; save();
+        video.removeAttribute('src'); video._seen = false;
+        show('landing'); renderSteps();
+      }
+    });
+
+    renderSteps();
+  </script>
+</body>
+</html>
